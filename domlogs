@@ -1,0 +1,1 @@
+for i in `cut -d: -f1 /etc/trueuserdomains`;do echo "$i= `cut -d' ' -f1 /usr/local/apache/domlogs/$i|wc -l`" >> /usr/local/src/file;done
