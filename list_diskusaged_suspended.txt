@@ -1,1 +1,5 @@
+#!/bin/bash
+# Display bandwidth usage
+# By mekbuk@github 2020/10/28
+
 for s_lst in `ls -A /var/cpanel/suspended`; do du -sh /var/cpanel/suspended/$s_lst | echo besar disk akun $s_lst sebesar: `awk '{print $1}'` ;done
