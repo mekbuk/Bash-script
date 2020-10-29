@@ -1,0 +1,8 @@
+#!/bin/sh
+ionice -c3 find /home/*/fantastico_backups/ -name 'backup*' -mtime +15 -exec rm {} \;
+ionice -c3 find /home/*/fantastico_backups/ -name '.backup*' -mtime +15 -exec rm {} \;
+ionice -c3 find /home/*/tmp/Cpanel_Form_file.upload.* -mtime +0 -exec rm {} \;
+ionice -c3 find /home/*/mail/*/*/.Trash/cur/* -type f -mtime +6 -exec  rm {} \;
+ionice -c3 find /home/*/mail/*/*/.Trash/new/* -type f -mtime +6 -exec  rm {} \;
+ionice -c3 find /home/*/mail/.Trash/cur/* -type f -mtime +6 -exec  rm {} \;
+ionice -c3 find /home/*/mail/.Trash/new/* -type f -mtime +6 -exec  rm {} \;
