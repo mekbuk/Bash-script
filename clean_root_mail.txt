@@ -1,0 +1,2 @@
+#!/bin/sh
+/usr/sbin/exiqgrep -i -r root@`hostname`| xargs /usr/sbin/exim -Mrm > /dev/null
