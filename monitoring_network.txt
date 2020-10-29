@@ -1,0 +1,125 @@
+Reference URL: http://www.cyberciti.biz/tips/top-linux-monitoring-tools.html
+
+top -cd2
+vmstat 3  ---The command vmstat reports information about processes, memory, paging, block IO, traps, and cpu activity
+vmstat -m  ---Display Memory Utilization Slabinfo
+vmstat -a ---Get Information About Active / Inactive Memory Pages
+mpstat  ---Display the utilization of each CPU individually using mpstat
+w  ---Find Out Who Is Logged on And What They Are Doing
+uptime  ---Tell How Long The System Has Been Running
+
+
+ps auft ---Print All Process On The Server
+ps -C httpd -o pid=    ---Display Only The Process IDs of httpd
+pgrep httpd  ---Display Only The Process IDs of httpd
+ps -auxf | sort -nr -k 4 | head -10  ---Find Out The Top 10 Memory Consuming Process
+ps -auxf | sort -nr -k 3 | head -10  ---Find Out top 10 CPU Consuming Process
+free
+
+iostat  ---Average CPU Load, Disk Activity
+
+sar command
+=================
+sar -n DEV | more  ---The sar command is used to collect, report, and save system activity information. To see network counter
+sar -n DEV -f /var/log/sa/sa24 | more  ---To display the network counters from the 24th:
+sar 4 5   ---display real time usage using sar
+==============
+
+
+Netstat command
+=================
+netstat -tulpn
+netstat -anp |grep 'tcp\|udp' | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+netstat -tulnap | awk '{print $7}' | sed -n -e '/[/]/p' | cut -s -d'/' -f2 | sort | uniq -c | sort -nk 1
+netstat -an |grep :80 |awk {'print $5'} |cut -d: -f1|sort|uniq -c|sort -n
+netstat -an |grep :21 |awk {'print $5'} |cut -d: -f1|sort|uniq -c|sort -n
+netstat -nat | awk '{print $6}' | sort | uniq -c | sort -n
+netstat -nat |grep IPaddress | awk '{print $6}' | sort | uniq -c | sort -n
+netstat -atun | awk '{print $5}' | cut -d: -f1 | sed -e '/^$/d' |sort | uniq -c | sort -n  ---Find Out If Box is Under DoS Attack or Not
+==============
+
+
+ss command
+=================
+ss -s  ---List currently established, closed, orphaned and waiting TCP sockets
+ss -l  ---Display All Open Network Ports
+ss -pl ---To see process named using open socket
+ss -lp | grep 80 ---Find out who is responsible for opening socket / port # 80
+ss -t -a  ---Display All TCP Sockets
+ss -u -a  ---Display All UDP Sockets
+ss -w -a  ---Display All RAW Sockets
+ss -o state established '( dport = :smtp or sport = :smtp )'  ---Display All Established SMTP Connections
+ss -o state established '( dport = :http or sport = :http )'  ---Display All Established HTTP Connections
+ss -tp --- To check run time tcp connections
+
+ss command options summery
+ 
+Usage: ss [ OPTIONS ]
+       ss [ OPTIONS ] [ FILTER ]
+   -h, --help		this message
+   -V, --version	output version information
+   -n, --numeric	don't resolve service names
+   -r, --resolve       resolve host names
+   -a, --all		display all sockets
+   -l, --listening	display listening sockets
+   -o, --options       show timer information
+   -e, --extended      show detailed socket information
+   -m, --memory        show socket memory usage
+   -p, --processes	show process using socket
+   -i, --info		show internal TCP information
+   -s, --summary	show socket usage summary
+ 
+   -4, --ipv4          display only IP version 4 sockets
+   -6, --ipv6          display only IP version 6 sockets
+   -0, --packet	display PACKET sockets
+   -t, --tcp		display only TCP sockets
+   -u, --udp		display only UDP sockets
+   -d, --dccp		display only DCCP sockets
+   -w, --raw		display only RAW sockets
+   -x, --unix		display only Unix domain sockets
+   -f, --family=FAMILY display sockets of type FAMILY
+ 
+   -A, --query=QUERY, --socket=QUERY
+       QUERY := {all|inet|tcp|udp|raw|unix|packet|netlink}[,QUERY]
+ 
+   -D, --diag=FILE	Dump raw information about TCP sockets to FILE
+   -F, --filter=FILE   read filter information from FILE
+       FILTER := [ state TCP-STATE ] [ EXPRESSION ]
+==============
+
+
+
+
+iptraf - Realtime Network Statistics 
+==============
+(In order to use this command, first we will need to install iptraf on the server)
+yum install iptraf
+==============
+
+
+tcpdump - Detailed Network Traffic Analysis
+==============
+tcpdump -i eth0 'tcp port 80'  ---To display all IPv4 HTTP packets to and from port 80
+tcpdump 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'   ----To display all IPv4 HTTP packets to and from port 80
+tcpdump
+==============
+
+
+
+strace - System Calls
+===============
+strace -o output.txt php index.php
+strace -o output.txt /bin/foo  ---strace against /bin/foo and capture its output to a text file in output.txt
+===============
+
+
+
+/Proc file system - Various Kernel Statistics
+================
+# cat /proc/cpuinfo
+# cat /proc/meminfo
+# cat /proc/zoneinfo
+# cat /proc/mounts
+================
+
+
