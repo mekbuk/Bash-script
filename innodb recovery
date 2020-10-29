@@ -1,0 +1,64 @@
+To find out Innodb databases
+================
+mysql -N mysql -e "SELECT table_schema, table_name FROM INFORMATION_SCHEMA.TABLES WHERE engine = 'innodb';" | awk '{print $1}' | sort | uniq > /usr/local/src/innodb_databases-08012016.txt
+find /var/lib/mysql -name "*.ibd"|awk -F / '{print $5}'|sort -n|uniq > /usr/local/src/innodb_databases-08012016.txt
+
+
+MySQL variables used are 
+ -e, --execute=name  Execute command and quit. (Disables --force and history file.)
+ -N, --skip-column-names Don't write column names in results.
+================
+
+
+To create mysqldump of all the innodb databases
+===============
+# cat /usr/local/src/dumpmysql-innodb.sh
+#/bin/bash
+for i in `cat /usr/local/src/innodb_databases-08012016.txt`; do
+mysqldump -ER $i > /home/mysqldump-08012016/$i.sql;
+done
+
+
+MysqlDump Variables used are
+ -E, --events        Dump events.
+ -R, --routines      Dump stored routines (functions and procedures).
+===============
+
+
+Recovering innodb databases 
+================
+# cat /usr/local/src/restoreinnnodb.sh
+#/bin/bash
+for i in `cat /usr/local/src/innodb_databases-08012016.txt`; do
+echo $i;
+echo "/var/lib/mysql/$i"
+#ls -la /home/mysqlbackup/$i.sql
+mv /var/lib/mysql/$i /home/sachinn/mysqlrestore;
+mysqladmin create $i;
+mysql $i < /home/mysqldump-08012016/$i.sql;
+done
+================
+
+
+Entire Process
+==============
+We need to perform MySQL innodb recovery process on r112 server. Kindly use the below script
+1. Create database dump of all the innodb database using the below script:
+/usr/local/src/dumpmysql-innodb.sh
+
+
+2. Stop the mysql services, then move the innodb file out of the mysql folders
+ibdata1
+
+ib_logfile0
+ib_logfile1
+
+3. Once you move the ib_data and log files, start the mysql service
+4. Recover the innodb databases from backup using the below script:
+
+/usr/local/src/restoreinnnodb.sh
+
+Once the databases are restored successfully, verify the error logs and ensure everything is working fine.
+==============
+
+
