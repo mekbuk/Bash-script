@@ -1,0 +1,55 @@
+Reboot the server is rescue mode and then apply below fix.
+
+# nvme list
+
+
+- Fix for NVMe Servers
+mount /dev/md3 /mnt/ 
+mount /dev/md2 /mnt/boot/ 
+mount /dev/nvme0n1p1 /mnt/boot/efi/ 
+mount -o bind /dev /mnt/dev 
+mount -o bind /dev/pts /mnt/dev/pts 
+mount -o bind /proc /mnt/proc 
+mount -o bind /run /mnt/run 
+mount -o bind /sys /mnt/sys 
+chroot /mnt/ 
+grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg 
+grub2-set-default 0
+exit
+reboot 
+
+
+
+
+
+To fix grub issue : http://prntscr.com/cf92at
+========
+grub> root=(hd click on tab
+grub> root=(hd0,0)
+to see that exact partition on the server run below command in grub.
+cat /etc/fstab
+
+and then select any old kernel using below command 
+grub> kernel /boot/vmlinuz- click on tab to see available kernel. 
+grub> kernel /boot/vmlinuz-2.6.32-573.26.1.el6.x86_64 root=/dev/sda1
+grub> initrd /boot/initrd.img-2.6.32-573.26.1.el6.x86_64
+grub> boot
+========
+
+
+- Fix for SATA/SSD Servers
+
+mount /dev/md3 /mnt/ 
+mount /dev/md2 /mnt/boot/ 
+mount /dev/sda1 /mnt/boot/efi/ 
+mount -o bind /dev /mnt/dev 
+mount -o bind /dev/pts /mnt/dev/pts 
+mount -o bind /proc /mnt/proc 
+mount -o bind /run /mnt/run 
+mount -o bind /sys /mnt/sys 
+chroot /mnt/ 
+grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg 
+grub2-set-default 0
+exit
+reboot
+
