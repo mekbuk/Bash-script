@@ -70,3 +70,6 @@ yum -y install perl perl-core wget screen w3m elinks openssh-clients openssh-ser
 
 # Restart Network
 service network restart
+
+echo ""
+echo "Configuring Firewall, network, /etc/hosts and DNS server has been finished. your server is ready "
